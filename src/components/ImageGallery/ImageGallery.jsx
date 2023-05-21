@@ -26,5 +26,4 @@ ImageGallery.prototypes = {
       largeImageURL: PropTypes.string.isRequired,
     })
   ).isRequired,
-  onOpenModal: PropTypes.func.isRequired,
 };

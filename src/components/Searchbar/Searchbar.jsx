@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import {
   SearchbarHead,
@@ -8,54 +9,44 @@ import {
 } from './Searchbar.styled';
 import { FaSearch } from 'react-icons/fa';
 
-const { Component } = require('react');
+const Searchbar = ({ onSubmit }) => {
+  const [searchQuery, setSearchQuery] = useState('');
 
-class Searchbar extends Component {
-  state = {
-    searchQuery: '',
+  const handleChange = evt => {
+    setSearchQuery(evt.target.value);
   };
 
-  handleChange = evt => {
-    const { value } = evt.target;
-    this.setState({ searchQuery: value });
-  };
-  handleSubmit = evt => {
+  const handleSubmit = evt => {
     evt.preventDefault();
-    if (this.state.searchQuery.trim() === '') {
+    if (searchQuery.trim() === '') {
       toast.error('Please enter a search topic !');
       return;
     }
-
-    this.props.onSubmit(this.state.searchQuery);
-    this.reset();
+    onSubmit(searchQuery);
+    setSearchQuery('');
   };
 
-  reset = () => {
-    this.setState({ searchQuery: '' });
-  };
+  return (
+    <>
+      <SearchbarHead>
+        <SearchForm onSubmit={handleSubmit}>
+          <SearchFormButton type="submit">
+            <FaSearch size={22} />
+            <ButtonLabel>Search</ButtonLabel>
+          </SearchFormButton>
+          <Input
+            type="text"
+            name="searchQuery"
+            autocomplete="off"
+            autoFocus={true}
+            placeholder="Search images and photos"
+            value={searchQuery}
+            onChange={handleChange}
+          />
+        </SearchForm>
+      </SearchbarHead>
+    </>
+  );
+};
 
-  render() {
-    return (
-      <>
-        <SearchbarHead>
-          <SearchForm onSubmit={this.handleSubmit}>
-            <SearchFormButton type="submit">
-              <FaSearch size={22} />
-              <ButtonLabel>Search</ButtonLabel>
-            </SearchFormButton>
-            <Input
-              type="text"
-              name="searchQuery"
-              autocomplete="off"
-              autoFocus={true}
-              placeholder="Search images and photos"
-              value={this.state.searchQuery}
-              onChange={this.handleChange}
-            />
-          </SearchForm>
-        </SearchbarHead>
-      </>
-    );
-  }
-}
 export default Searchbar;
